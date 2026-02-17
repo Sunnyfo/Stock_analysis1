@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能股票分析系统</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📈 智能股票分析系统</h1>
+            <p class="subtitle">智能选股 · 深度诊断 · 实时分析</p>
+        </header>
+
+        <div class="main-content">
+            <!-- 选项卡 -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="diagnosis">诊股分析</button>
+                <button class="tab-btn" data-tab="selection">智能选股</button>
+                <button class="tab-btn" data-tab="settings">设置</button>
+            </div>
+
+            <!-- 诊股分析面板 -->
+            <div class="tab-panel active" id="diagnosis-panel">
+                <div class="panel">
+                    <h2>🔍 股票诊断分析</h2>
+                    <p class="panel-desc">输入股票名称、代码或首字母缩写，获取深度分析报告</p>
+                    
+                    <div class="form-group">
+                        <label>股票搜索</label>
+                        <div class="search-box">
+                            <input type="text" id="stock-search" placeholder="输入股票名称、代码或首字母缩写（如：茅台、600519、GF）" autocomplete="off">
+                            <button class="search-btn" id="search-btn">🔎</button>
+                        </div>
+                        <div class="search-results" id="search-results"></div>
+                    </div>
+
+                    <div class="selected-stock" id="selected-stock" style="display: none;">
+                        <label>已选股票</label>
+                        <div class="stock-display">
+                            <span class="stock-code" id="stock-code-display">600519</span>
+                            <span class="stock-name" id="stock-name-display">贵州茅台</span>
+                            <button class="clear-btn" id="clear-stock">✕</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>发送渠道</label>
+                        <div class="channel-options">
+                            <label class="radio-label">
+                                <input type="radio" name="channel" value="feishu" checked>
+                                <span>飞书</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="channel" value="email">
+                                <span>邮件</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="channel" value="both">
+                                <span>两者都发送</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="email-recipients" id="email-recipients" style="display: none;">
+                        <label>收件人邮箱</label>
+                        <div class="email-list" id="email-list"></div>
+                        <div class="email-input">
+                            <input type="email" id="email-input" placeholder="输入邮箱地址">
+                            <button class="add-btn" id="add-email">添加</button>
+                        </div>
+                    </div>
+
+                    <button class="submit-btn" id="diagnose-btn">开始诊断</button>
+                </div>
+            </div>
+
+            <!-- 智能选股面板 -->
+            <div class="tab-panel" id="selection-panel">
+                <div class="panel">
+                    <h2>🎯 智能选股</h2>
+                    <p class="panel-desc">根据您的筛选条件，智能推荐优质股票</p>
+
+                    <div class="form-group">
+                        <label>行业选择</label>
+                        <select id="industry-select">
+                            <option value="">全部行业</option>
+                            <option value="科技">科技</option>
+                            <option value="金融">金融</option>
+                            <option value="医疗">医疗</option>
+                            <option value="消费">消费</option>
+                            <option value="能源">能源</option>
+                            <option value="制造">制造</option>
+                            <option value="地产">地产</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label>市值范围</label>
+                            <div class="range-input">
+                                <input type="number" id="min-market-cap" placeholder="最小市值（亿）" min="0">
+                                <span>—</span>
+                                <input type="number" id="max-market-cap" placeholder="最大市值（亿）" min="0">
+                            </div>
+                        </div>
+
+                        <div class="form-group half">
+                            <label>市盈率范围</label>
+                            <div class="range-input">
+                                <input type="number" id="min-pe" placeholder="最小PE" min="0">
+                                <span>—</span>
+                                <input type="number" id="max-pe" placeholder="最大PE" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>K线周期</label>
+                        <div class="radio-options">
+                            <label class="radio-label">
+                                <input type="radio" name="kline" value="daily" checked>
+                                <span>日线</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="kline" value="weekly">
+                                <span>周线</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="kline" value="monthly">
+                                <span>月线</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>技术指标</label>
+                        <div class="checkbox-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="check-macd">
+                                <span>MACD金叉</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="check-rsi">
+                                <span>RSI超卖</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="check-volume">
+                                <span>放量上涨</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="check-breakout">
+                                <span>突破阻力</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>其他条件</label>
+                        <textarea id="other-conditions" rows="3" placeholder="输入其他选股条件，如：国企、分红率高、成长性好等"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>发送渠道</label>
+                        <div class="channel-options">
+                            <label class="radio-label">
+                                <input type="radio" name="selection-channel" value="feishu" checked>
+                                <span>飞书</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="selection-channel" value="email">
+                                <span>邮件</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="selection-channel" value="both">
+                                <span>两者都发送</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="email-recipients" id="selection-email-recipients" style="display: none;">
+                        <label>收件人邮箱</label>
+                        <div class="email-list" id="selection-email-list"></div>
+                        <div class="email-input">
+                            <input type="email" id="selection-email-input" placeholder="输入邮箱地址">
+                            <button class="add-btn" id="selection-add-email">添加</button>
+                        </div>
+                    </div>
+
+                    <button class="submit-btn" id="select-btn">开始选股</button>
+                </div>
+            </div>
+
+            <!-- 设置面板 -->
+            <div class="tab-panel" id="settings-panel">
+                <div class="panel">
+                    <h2>⚙️ 系统设置</h2>
+                    
+                    <div class="form-group">
+                        <label>默认收件人邮箱</label>
+                        <div class="email-list" id="default-email-list"></div>
+                        <div class="email-input">
+                            <input type="email" id="default-email-input" placeholder="输入默认邮箱地址">
+                            <button class="add-btn" id="add-default-email">添加</button>
+                        </div>
+                        <p class="hint">添加的邮箱将作为默认收件人，每次分析时无需重复输入</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>飞书Webhook地址</label>
+                        <input type="text" id="webhook-url" placeholder="输入飞书Webhook地址">
+                        <p class="hint">用于向飞书群聊发送分析结果</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>消息格式</label>
+                        <div class="radio-options">
+                            <label class="radio-label">
+                                <input type="radio" name="message-format" value="post" checked>
+                                <span>富文本（推荐）</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="message-format" value="card">
+                                <span>交互式卡片</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="submit-btn" id="save-settings">保存设置</button>
+                </div>
+            </div>
+
+            <!-- 结果显示区域 -->
+            <div class="result-panel" id="result-panel" style="display: none;">
+                <h3>📊 分析结果</h3>
+                <div class="result-content" id="result-content"></div>
+                <button class="close-btn" id="close-result">关闭</button>
+            </div>
+
+            <!-- 加载中提示 -->
+            <div class="loading-overlay" id="loading-overlay" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>正在分析中，请稍候...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
